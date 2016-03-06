@@ -1,0 +1,6 @@
+{
+	"/login": {
+		"methods": ["get"],
+		"checkLogin": false
+	}
+}
