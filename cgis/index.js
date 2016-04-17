@@ -8,7 +8,9 @@ router.use(function(req, res){
 
         try {
             action = require('./' + action);
-        } catch (e) { }
+        } catch (e) {
+            console.log('load action error:', e);
+        }
 
         if (typeof action === 'function') {
             return action(req, res);

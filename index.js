@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
-const actions = require('./actions')
+const actions = require('./cgis')
 
 const app = express()
 
@@ -27,10 +27,14 @@ const passport = require('./modules/localPassport')
 app.use(passport.initialize())
 app.use(passport.session())
 
-const router = require('./modules/router')
-app.use(router)
-
-app.use('/cgi-bin/', actions);
+app.get('/login', passport.authenticate('local', { 
+    successRedirect: '/', 
+    failureRedirect: '/account.html' 
+}));
+app.use('/cgi-bin/', function(req, res, next){
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/account.html')
+}, actions);
 
 const port = 6789
 app.listen(port, ()=>console.log('listening on port', port))

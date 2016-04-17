@@ -2,11 +2,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
+var WATCH = !!process.env.watch;
+
 module.exports = {
 
     entry: {
-        vender: ['react', 'react-dom'],
-        main: './js/main.js'
+        index: './apps/index.js',
+        account: './apps/account.js'
     },
 
     output: {
@@ -25,10 +27,23 @@ module.exports = {
     },
 
     plugins: [
-        new HtmlWebpackPlugin({ template: 'views/index.html' }),
+        new HtmlWebpackPlugin({ 
+            template: 'views/index.html',
+            chunks: ['common', 'index'],
+            title: '首页',
+            hash: true,
+            filename: 'index.html'
+        }),
+        new HtmlWebpackPlugin({ 
+            template: 'views/index.html',
+            chunks: ['common', 'account'],
+            title: '账户管理',
+            hash: true,
+            filename: 'account.html'
+        }),
         new UglifyJsPlugin({compress:{warnings:false}}),
-        new CommonsChunkPlugin({name:'vender', filename: 'commons.js'})
+        new CommonsChunkPlugin({name:'common'})
     ],
 
-    watch: false
+    watch: WATCH
 }
