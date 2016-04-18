@@ -31,9 +31,10 @@ app.get('/login', passport.authenticate('local', {
     successRedirect: '/', 
     failureRedirect: '/account.html' 
 }));
+app.get('/logout', (req, res)=>{req.logout();res.redirect('/');});
 app.use('/cgi-bin/', function(req, res, next){
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/account.html')
+    res.json({code:1, msg:'no login'})
 }, actions);
 
 const port = 6789
