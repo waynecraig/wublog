@@ -32,7 +32,8 @@ export const getInfo = () => {
         dispatch(receiveAccountInfo())
 
         fetch('/cgi-bin/getAccountInfo', {
-            method: 'POST'
+            method: 'POST',
+            credentials: 'include'
         }).then(res => res.json())
         .then(json => {
             if (json.code !== 0) {
