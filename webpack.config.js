@@ -1,8 +1,15 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
-var WATCH = !!process.env.watch;
+const WATCH = !!process.env.watch;
+const EXPLUGINS = process.env.compress ? [
+    new DefinePlugin({
+        'process.env.NODE_ENV': '"production"'
+    }),
+    new UglifyJsPlugin({compress:{warnings:false}})
+] : [];
+
 
 module.exports = {
 
@@ -13,7 +20,8 @@ module.exports = {
 
     output: {
         path: './static',
-        filename: '[name].js'
+        filename: '[name].js',
+        sourceMapFilename: '[name].map'
     },
 
     module: {
@@ -41,9 +49,10 @@ module.exports = {
             hash: true,
             filename: 'account.html'
         }),
-        new UglifyJsPlugin({compress:{warnings:false}}),
         new CommonsChunkPlugin({name:'common'})
-    ],
+    ].concat(EXPLUGINS),
+
+    devtool: 'source-map',
 
     watch: WATCH
 }

@@ -1,12 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Login from './login'
-import FlatButton from 'material-ui/lib/flat-button'
-
-import {
-    logout,
-    getInfo
-} from '../actions/account'
+import UserInfo from './userInfo'
+import { getInfo } from '../actions/account'
 
 class Account extends Component {
 
@@ -17,17 +13,7 @@ class Account extends Component {
         return (
             <div>
                 {isFetching ? '加载中' : (
-                  msg ? <Login/> : (
-                      info ? (
-                          <div>
-                              <p>{info}</p>
-                              <FlatButton
-                                  label='退出'
-                                  onClick={()=>logout()}
-                              />
-                          </div>
-                      ) : null
-                  )
+                    msg ? <Login/> : <UserInfo info={info}/>
                 )}
             </div>
         )
