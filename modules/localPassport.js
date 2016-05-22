@@ -2,6 +2,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const User = require('./db').user
 const ObjectID = require('mongodb').ObjectID
+const md5 = require('md5')
 
 passport.serializeUser(function(user, done) {
     done(null, user._id);
@@ -20,7 +21,7 @@ passport.use(new LocalStrategy(
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
             }
-            if (user.password !== password) {
+            if (user.password !== md5(password)) {
                 return done(null, false, { message: 'Incorrect password.' });
             }
             return done(null, user);
