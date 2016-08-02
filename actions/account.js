@@ -36,8 +36,8 @@ export const getInfo = () => {
             credentials: 'include'
         }).then(res => res.json())
         .then(json => {
-            if (json.code !== 0) {
-                dispatch(fetchAccountInfoError(json.msg))
+            if (json.err) {
+                dispatch(fetchAccountInfoError(json.err))
             } else {
                 dispatch(receiveAccountInfo(json.info))
             }

@@ -32,9 +32,13 @@ app.get('/login', passport.authenticate('local', {
     failureRedirect: '/account.html' 
 }));
 app.get('/logout', (req, res)=>{req.logout();res.redirect('/');});
+
+const publicCgis = ['listBlog'];
 app.use('/cgi-bin/', function(req, res, next){
-    if (req.isAuthenticated()) { return next(); }
-    res.json({code:1, msg:'no login'})
+    if (~publicCgis.indexOf(req.url.substr(1)) || req.isAuthenticated()) { 
+        return next(); 
+    }
+    res.json({err:'no login'})
 }, actions);
 
 const port = 6789

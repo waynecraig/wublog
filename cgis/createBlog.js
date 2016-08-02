@@ -1,4 +1,4 @@
-const Blog = require('../modules/db');
+const Blog = require('../modules/db').blog;
 
 module.exports = (req, res) => {
 
@@ -8,9 +8,11 @@ module.exports = (req, res) => {
     const isDraft = !!body.isDraft;
 
     if (!title || !content) {
-        res.json({code: 1, msg: 'missing title or content'});
+        res.json({err: 'missing title or content'});
     }
 
-    Blog.insert({title, content, isDraft});
+    Blog.insert({title, content, isDraft}, {w:1}, (err, result)=>{
+        res.json({err, result});
+    });
 
 }

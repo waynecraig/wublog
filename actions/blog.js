@@ -1,38 +1,33 @@
+import wrapFetch from '../common/wrapFetch'
+
 export const REQUEST_BLOG_LIST = 'REQUEST_BLOG_LIST'
-const requestBlogList = () => ({
-    type: REQUEST_BLOG_LIST
-})
-
 export const RECEIVE_BLOG_LIST = 'RECEIVE_BLOG_LIST'
-const receiveBlogList = (list) => ({
-    type: RECEIVE_BLOG_LIST,
-    list
-})
-
 export const FETCH_BLOG_LIST_ERROR = 'FETCH_BLOG_LIST_ERROR'
-const fetchBlogListError = (msg) => ({
-    type: FETCH_BLOG_LIST_ERROR,
-    msg
-})
 
-export const fetchList = () => {
+export const REQUEST_BLOG = 'REQUEST_BLOG'
+export const RECEIVE_BLOG = 'RECEIVE_BLOG'
+export const FETCH_BLOG_ERROR = 'FETCH_BLOG_ERROR'
 
-    return dispatch => {
+export const fetchList = (skip=0, limit=0) => (
 
-        dispatch(receiveBlogList())
+    wrapFetch(
+        REQUEST_BLOG_LIST,
+        RECEIVE_BLOG_LIST,
+        FETCH_BLOG_LIST_ERROR,
+        'listBlog',
+        {skip, limit}
+    )
 
-        fetch('/cgi-bin/getBlogList', {
-            method: 'POST',
-            credentials: 'include'
-        }).then(res => res.json())
-        .then(json => {
-            if (json.code !== 0) {
-                dispatch(fetchBlogListError(json.msg))
-            } else {
-                dispatch(receiveBlogList(json.list))
-            }
-        })
+)
 
-    }
+export const fetchDetail = id => (
 
-}
+    wrapFetch(
+        REQUEST_BLOG,
+        RECEIVE_BLOG,
+        FETCH_BLOG_ERROR,
+        'getBlog',
+        {id}
+    )
+
+)
